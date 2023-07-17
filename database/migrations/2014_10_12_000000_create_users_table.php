@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\TypeSex;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,12 +17,14 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->string('initials');
-            $table->string('photo');
-            $table->string('birth');
-            $table->string('naturalness');
-            $table->string('marital_status');
+            $table->string('password')->nullable();
+            $table->string('initials')->nullable();
+            $table->string('photo')->nullable();
+            $table->date('birth')->nullable();
+            $table->string('naturalness')->nullable();
+            $table->string('nationality')->nullable();
+            $table->string('marital_status')->nullable();
+            $table->enum('typeContact', array_column(TypeSex::cases(), 'value'))->default('Men');
             $table->rememberToken();
             $table->timestamps();
         });
@@ -32,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        
+
     }
 };

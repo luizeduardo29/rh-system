@@ -34,12 +34,21 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'initials' => ['required','string', 'max:5'],
+            'birth' => ['required', 'date'],
+            'naturalness' => ['required', 'string', 'max:255'],
+            'nationality' => ['required', 'string', 'max:255'],
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'initials' =>$request->initials,
+            'birth' => $request->birth,
+            'naturalness' => $request->naturalness,
+            'nationality' => $request->nationality,
+            'photo' => $request->file('image')->store('users/profile'),
         ]);
 
         event(new Registered($user));

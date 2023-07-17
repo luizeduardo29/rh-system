@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\TypeContact;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,7 +15,7 @@ return new class extends Migration
         Schema::create('contact', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            //typeContact
+            $table->enum('typeContact', array_column(TypeContact::cases(), 'value'))->default('Telephone');
             $table->string('info');
             $table->timestamps();
         });

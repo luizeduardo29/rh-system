@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
+    <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
         @csrf
 
         <!-- Name -->
@@ -16,14 +16,89 @@
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
+        <!-- Initials -->
+        <div class="mt-4">
+            <x-input-label for="initials" :value="__('Initials')" />
+            <x-text-input
+                id="initials"
+                class="block mt-1 w-full"
+                type="text"
+                name="initials"
+                :value="old('initials')"
+                required
+                autofocus
+                autocomplete="intials"
+            />
+            <x-input-error :messages="$errors->get('initials')" class="mt-2" />
+        </div>
+
+        <div class="mt-4">
+            <x-input-label for="birth" :value="__('birth')" />
+            <x-text-input
+                id="birth"
+                class="block mt-1 w-full"
+                type="date"
+                name="birth"
+                :value="old('birth')"
+                required
+                autofocus
+                autocomplete="birth"
+            />
+            <x-input-error :messages="$errors->get('birth')" class="mt-2" />
+        </div>
+
+        <div class="mt-4">
+            <x-input-label for="nationality" :value="__('Nationality')" />
+            <x-text-input
+                id="nationality"
+                class="block mt-1 w-full"
+                type="text"
+                name="nationality"
+                :value="old('nationality')"
+                required
+                autofocus
+                autocomplete="nationality"
+            />
+            <x-input-error :messages="$errors->get('birth')" class="mt-2" />
+        </div>
+
+        <div class="mt-4">
+            <x-input-label for="naturalness" :value="__('Naturalness')" />
+            <x-text-input
+                id="naturalness"
+                class="block mt-1 w-full"
+                type="text"
+                name="naturalness"
+                :value="old('naturalness')"
+                required
+                autofocus
+                autocomplete="naturalness"
+            />
+            <x-input-error :messages="$errors->get('naturalness')" class="mt-2" />
+        </div>
+
+        <!-- Photo -->
+        <div class="mt-4">
+            <x-input-label for="photo" :value="__('photo')" />
+            <input
+            type="file"
+            name="image"
+            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+            />
+
+        </div>
+
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
+            <x-text-input
+                id="password"
+                class="block mt-1 w-full"
+                type="password"
+                name="password"
+                required autocomplete="new-password"
+            />
 
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
