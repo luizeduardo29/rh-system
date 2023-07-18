@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('contact', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->enum('typeContact', array_column(TypeContact::cases(), 'value'))->default('Telephone');
+            $table->enum('typeContact', array_column(TypeContact::cases(), 'value'))->default('Telefone');
             $table->string('info');
             $table->timestamps();
         });

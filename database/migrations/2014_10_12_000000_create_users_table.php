@@ -1,6 +1,9 @@
 <?php
 
-use App\Enums\TypeSex;
+
+use App\Enums\Gender;
+use App\Enums\MaritalStatus;
+use App\Enums\Nations;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -21,10 +24,10 @@ return new class extends Migration
             $table->string('initials')->nullable();
             $table->string('photo')->nullable();
             $table->date('birth')->nullable();
-            $table->string('naturalness')->nullable();
-            $table->string('nationality')->nullable();
-            $table->string('marital_status')->nullable();
-            $table->enum('typeContact', array_column(TypeSex::cases(), 'value'))->default('Men');
+            $table->enum('naturalness', array_column(Nations::cases(), 'value'))->default('Nao Informado');
+            $table->enum('nationality', array_column(Nations::cases(), 'value'))->default('Nao Informado');
+            $table->enum('typeSex', array_column(Gender::cases(), 'value'))->default('Nao Informar');
+            $table->enum('maritalStatus', array_column(MaritalStatus::cases(), 'value'))->default('Solteiro(a)');
             $table->rememberToken();
             $table->timestamps();
         });

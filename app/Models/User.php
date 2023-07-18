@@ -26,6 +26,8 @@ class User extends Authenticatable
         'birth',
         'nationality',
         'naturalness',
+        'typeSex',
+        'maritalStatus'
     ];
 
     /**

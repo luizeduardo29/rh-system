@@ -30,15 +30,22 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        // dd($request->all());
+        //$validated =
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'initials' => ['required','string', 'max:5'],
             'birth' => ['required', 'date'],
-            'naturalness' => ['required', 'string', 'max:255'],
-            'nationality' => ['required', 'string', 'max:255'],
+            'naturalness' => ['required'],
+            'nationality' => ['required'],
+            'gender' => ['required'],
+            'maritalStatus' => ['required'],
+            'photo' => ['required'],
         ]);
+
+        //  dd($request->all());
 
         $user = User::create([
             'name' => $request->name,
@@ -49,6 +56,8 @@ class RegisteredUserController extends Controller
             'naturalness' => $request->naturalness,
             'nationality' => $request->nationality,
             'photo' => $request->file('image')->store('users/profile'),
+            'gender' => $request->gender,
+            'maritalStatus' => $request->maritalStatus,
         ]);
 
         event(new Registered($user));

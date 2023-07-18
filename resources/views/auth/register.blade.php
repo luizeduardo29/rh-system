@@ -1,7 +1,7 @@
 <x-guest-layout>
     <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
         @csrf
-
+{{-- @dd(rand(1,1000) . '@com') --}}
         <!-- Name -->
         <div>
             <x-input-label for="name" :value="__('Name')" />
@@ -59,7 +59,7 @@
                 autofocus
                 autocomplete="nationality"
             />
-            <x-input-error :messages="$errors->get('birth')" class="mt-2" />
+            <x-input-error :messages="$errors->get('nationality')" class="mt-2" />
         </div>
 
         <div class="mt-4">
@@ -77,12 +77,66 @@
             <x-input-error :messages="$errors->get('naturalness')" class="mt-2" />
         </div>
 
-        <!-- Photo -->
         <div class="mt-4">
+                <label
+                for=""
+                class=block
+                appearance-none
+                w-full bg-gray-200
+                border
+                border-gray-200
+                text-gray-700
+                py-3
+                px-4
+                pr-8
+                rounded
+                leading-tight
+                focus:outline-none
+                focus:bg-white
+                focus:border-gray-500"
+                id="grid-state">Type Sex</label>
+                <select name="gender" class="form-select" required>
+                    @foreach(array_column(\App\Enums\Gender::cases(), 'value') as $option)
+                        <option
+                            value="{{$option}}">{{$option}}
+                        </option>
+                    @endforeach
+                </select>
+        </div>
+
+        <div class="mt-4">
+                <label
+                for=""
+                class=block
+                appearance-none
+                w-full bg-gray-200
+                border
+                border-gray-200
+                text-gray-700
+                py-3
+                px-4
+                pr-8
+                rounded
+                leading-tight
+                focus:outline-none
+                focus:bg-white
+                focus:border-gray-500"
+                id="grid-state">Marital Status</label>
+                <select name="maritalStatus" class="form-select" required>
+                    @foreach(array_column(\App\Enums\MaritalStatus::cases(), 'value') as $option)
+                        <option
+                            value="{{$option}}">{{$option}}
+                        </option>
+                    @endforeach
+                </select>
+        </div>
+
+        <!-- Photo -->
+        <div class="mt-4 relative">
             <x-input-label for="photo" :value="__('photo')" />
             <input
             type="file"
-            name="image"
+            name="photo"
             class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
             />
 
