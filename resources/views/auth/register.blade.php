@@ -12,7 +12,7 @@
         <!-- Email Address -->
         <div class="mt-4">
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
+            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" value="teste@1{{rand(1,100)}}" required autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
@@ -33,7 +33,7 @@
         </div>
 
         <div class="mt-4">
-            <x-input-label for="birth" :value="__('birth')" />
+            <x-input-label for="birth" :value="__('Birth')" />
             <x-text-input
                 id="birth"
                 class="block mt-1 w-full"
@@ -48,33 +48,57 @@
         </div>
 
         <div class="mt-4">
-            <x-input-label for="nationality" :value="__('Nationality')" />
-            <x-text-input
-                id="nationality"
-                class="block mt-1 w-full"
-                type="text"
-                name="nationality"
-                :value="old('nationality')"
-                required
-                autofocus
-                autocomplete="nationality"
-            />
-            <x-input-error :messages="$errors->get('nationality')" class="mt-2" />
+            <label
+            for=""
+            class=block
+            appearance-none
+            w-full bg-gray-200
+            border
+            border-gray-200
+            text-gray-700
+            py-3
+            px-4
+            pr-8
+            rounded
+            leading-tight
+            focus:outline-none
+            focus:bg-white
+            focus:border-gray-500"
+            id="grid-state">Naturalness</label>
+            <select name="naturalness" class="basic-single-select2" required>
+                @foreach(array_column(\App\Enums\Nations::cases(), 'value') as $option)
+                    <option
+                        value="{{$option}}">{{$option}}
+                    </option>
+                @endforeach
+            </select>
         </div>
 
         <div class="mt-4">
-            <x-input-label for="naturalness" :value="__('Naturalness')" />
-            <x-text-input
-                id="naturalness"
-                class="block mt-1 w-full"
-                type="text"
-                name="naturalness"
-                :value="old('naturalness')"
-                required
-                autofocus
-                autocomplete="naturalness"
-            />
-            <x-input-error :messages="$errors->get('naturalness')" class="mt-2" />
+            <label
+            for=""
+            class=block
+            appearance-none
+            w-full bg-gray-200
+            border
+            border-gray-200
+            text-gray-700
+            py-3
+            px-4
+            pr-8
+            rounded
+            leading-tight
+            focus:outline-none
+            focus:bg-white
+            focus:border-gray-500"
+            id="grid-state">Nationality</label>
+            <select name="nationality" class="basic-single-select2" required>
+                @foreach(array_column(\App\Enums\Nations::cases(), 'value') as $option)
+                    <option
+                        value="{{$option}}">{{$option}}
+                    </option>
+                @endforeach
+            </select>
         </div>
 
         <div class="mt-4">
@@ -131,9 +155,13 @@
                 </select>
         </div>
 
+        @include('auth._partials.contact')
+        {{-- @include('auth._partials.contact', ['teste' => rand(2, 200)]) --}}
+        {{-- @include('auth._partials.contact') --}}
+
         <!-- Photo -->
         <div class="mt-4 relative">
-            <x-input-label for="photo" :value="__('photo')" />
+            <x-input-label for="photo" :value="__('Photo')" />
             <input
             type="file"
             name="photo"
@@ -151,6 +179,7 @@
                 class="block mt-1 w-full"
                 type="password"
                 name="password"
+                value="11111111111111111111111111"
                 required autocomplete="new-password"
             />
 
@@ -163,6 +192,8 @@
 
             <x-text-input id="password_confirmation" class="block mt-1 w-full"
                             type="password"
+                value="11111111111111111111111111"
+
                             name="password_confirmation" required autocomplete="new-password" />
 
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
@@ -177,5 +208,9 @@
                 {{ __('Register') }}
             </x-primary-button>
         </div>
+
+
     </form>
 </x-guest-layout>
+
+<script type="text/javascript" src="js/select2.js"></script>
