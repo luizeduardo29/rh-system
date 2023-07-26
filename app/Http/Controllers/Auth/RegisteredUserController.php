@@ -30,7 +30,7 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        dd($request->all());
+        //dd($request->all());
         //$validated =
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -55,7 +55,7 @@ class RegisteredUserController extends Controller
             'birth' => $request->birth,
             'naturalness' => $request->naturalness,
             'nationality' => $request->nationality,
-            // 'photo' => $request->file('image')->store('users/profile'),
+            'photo' => $request->file('image')->store('users/profile'),
             'gender' => $request->gender,
             'maritalStatus' => $request->maritalStatus,
         ]);
@@ -73,7 +73,7 @@ class RegisteredUserController extends Controller
 
         $user->contacts()->createMany($request->contacts);
 
-        dd("hnjsdhjasgdhja");
+        //dd("hnjsdhjasgdhja");
 
         event(new Registered($user));
 

@@ -1,5 +1,9 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
+    @if (!isset($user))
+        <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
+    @else
+        {{-- <form method="PATCH" action="{{ route('user.update') }}" enctype="multipart/form-data"> --}}
+    @endif
         @csrf
 {{-- @dd(rand(1,1000) . '@com') --}}
         <!-- Name -->
@@ -8,6 +12,12 @@
             <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
+
+        {{-- <input
+            type="text"
+            name=""
+            value="{{ $user->email ?? old('email')}}"
+        > --}}
 
         <!-- Email Address -->
         <div class="mt-4">
@@ -122,7 +132,10 @@
                 <select name="gender" class="form-select" required>
                     @foreach(array_column(\App\Enums\Gender::cases(), 'value') as $option)
                         <option
-                            value="{{$option}}">{{$option}}
+                            selected
+                            value="{{$option}}"
+                        >
+                            {{$option}}
                         </option>
                     @endforeach
                 </select>
@@ -212,5 +225,7 @@
 
     </form>
 </x-guest-layout>
+
+
 
 <script type="text/javascript" src="js/select2.js"></script>

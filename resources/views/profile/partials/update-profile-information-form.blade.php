@@ -1,3 +1,5 @@
+@include('components.select2')
+
 <section>
     <header>
         <h2 class="text-lg font-medium text-gray-900">
@@ -13,13 +15,13 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
         @method('patch')
 
         <div>
             <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
+            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
 
@@ -47,6 +49,164 @@
             @endif
         </div>
 
+        <div>
+            <x-input-label for="initials" :value="__('Initials')" />
+            <x-text-input id="initials" name="initials" type="text" class="mt-1 block w-full" :value="old('initials', $user->initials)" />
+            <x-input-error class="mt-2" :messages="$errors->get('initials')" />
+        </div>
+
+        <div class="mt-4">
+            <x-input-label for="birth" :value="__('Birth')" />
+            <x-text-input
+                id="birth"
+                class="block mt-1 w-full"
+                type="date"
+                name="birth"
+                :value="old('birth', $user->birth->format('Y-m-d'))"
+                required
+                autofocus
+                autocomplete="birth"
+            />
+            <x-input-error :messages="$errors->get('birth')" class="mt-2" />
+        </div>
+
+        <div class="mt-4">
+            <label
+            for="nationality"
+            class=block
+            appearance-none
+            w-full bg-gray-200
+            border
+            border-gray-200
+            text-gray-700
+            py-3
+            px-4
+            pr-8
+            rounded
+            leading-tight
+            focus:outline-none
+            focus:bg-white
+            focus:border-gray-500"
+            id="grid-state">Nationality</label>
+            <select name="nationality" class="basic-single-select2" required >
+                @foreach(array_column(\App\Enums\Nations::cases(), 'value') as $option)
+                    <option
+                        value="{{ $option }}"
+                        @if($user->nationality == $option)
+                            selected
+                        @endif
+                    >
+                        {{$option}}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="mt-4">
+            <label
+            for="naturalness"
+            class=block
+            appearance-none
+            w-full bg-gray-200
+            border
+            border-gray-200
+            text-gray-700
+            py-3
+            px-4
+            pr-8
+            rounded
+            leading-tight
+            focus:outline-none
+            focus:bg-white
+            focus:border-gray-500"
+            id="grid-state">Naturalness</label>
+            <select name="naturalness" class="basic-single-select2" required >
+                @foreach(array_column(\App\Enums\Nations::cases(), 'value') as $option)
+                    <option
+                        value="{{ $option }}"
+                        @if($user->naturalness == $option)
+                            selected
+                        @endif
+                    >
+                        {{$option}}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="mt-4">
+            <label
+            for=""
+            class=block
+            appearance-none
+            w-full bg-gray-200
+            border
+            border-gray-200
+            text-gray-700
+            py-3
+            px-4
+            pr-8
+            rounded
+            leading-tight
+            focus:outline-none
+            focus:bg-white
+            focus:border-gray-500"
+            id="grid-state">Gender</label>
+            <select name="gender" class="form-select" required>
+                @foreach(array_column(\App\Enums\Gender::cases(), 'value') as $option)
+                    <option
+                        value="{{ $option }}"
+                        @if($user->gender == $option)
+                            selected
+                        @endif
+                    >
+                        {{$option}}
+                    </option>
+                @endforeach
+            </select>
+    </div>
+
+    <div class="mt-4">
+            <label
+            for=""
+            class=block
+            appearance-none
+            w-full bg-gray-200
+            border
+            border-gray-200
+            text-gray-700
+            py-3
+            px-4
+            pr-8
+            rounded
+            leading-tight
+            focus:outline-none
+            focus:bg-white
+            focus:border-gray-500"
+            id="grid-state">Marital Status</label>
+            <select name="maritalStatus" class="form-select" required>
+                @foreach(array_column(\App\Enums\MaritalStatus::cases(), 'value') as $option)
+                    <option
+                        value="{{ $option }}"
+                        @if($user->maritalStatus == $option)
+                            selected
+                        @endif
+                    >
+                        {{$option}}
+                    </option>
+                @endforeach
+            </select>
+    </div>
+
+    <div class="mt-4 relative">
+        <x-input-label for="photo" :value="__('Photo')" />
+        <input
+        type="file"
+        name="photo"
+        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+        />
+    </div>
+
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 
@@ -62,3 +222,5 @@
         </div>
     </form>
 </section>
+
+<script type="text/javascript" src="js/select2.js"></script>

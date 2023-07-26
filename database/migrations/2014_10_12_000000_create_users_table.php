@@ -26,7 +26,7 @@ return new class extends Migration
             $table->date('birth')->nullable();
             $table->enum('naturalness', array_column(Nations::cases(), 'value'))->default('Nao Informado');
             $table->enum('nationality', array_column(Nations::cases(), 'value'))->default('Nao Informado');
-            $table->enum('typeSex', array_column(Gender::cases(), 'value'))->default('Nao Informar');
+            $table->enum('gender', array_column(Gender::cases(), 'value'))->default('Nao Informar');
             $table->enum('maritalStatus', array_column(MaritalStatus::cases(), 'value'))->default('Solteiro(a)');
             $table->rememberToken();
             $table->timestamps();
