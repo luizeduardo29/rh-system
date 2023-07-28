@@ -207,8 +207,30 @@
         />
         </div>
 
+        @foreach ($user->contacts as $contact)
+        <div class="flex flew-row">
+            <x-input-label for="contact" :value="__('Contact')" />
+            <div class="mt-4">
+                <select name="typeContact" class="form-select" required>
+                    @foreach(array_column(\App\Enums\TypeContact::cases(), 'value') as $option)
+                    <option
+                    value="{{ $option }}"
+                    @if($contact->typeContact == $option)
+                    selected
+                    @endif
+                    >
+                        {{$option}}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+            <x-text-input id="typeContact" name="typeContact" type="text" class="" :value="old('info', $contact->info)" />
+        </div>
+
+        @endforeach
+
         <div class="mt-4">
-            <a href="">Contatos ({{ $user->contacts->count() }})</a>
+            <a href="">Contatos {{ $user->contacts->count() }}</a>
         </div>
 
         <div class="flex items-center gap-4">
