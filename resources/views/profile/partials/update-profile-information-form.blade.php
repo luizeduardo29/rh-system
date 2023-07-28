@@ -207,30 +207,28 @@
         />
         </div>
 
-        @foreach ($user->contacts as $contact)
-        <div class="flex flew-row">
+        <div>
             <x-input-label for="contact" :value="__('Contact')" />
-            <div class="mt-4">
-                <select name="typeContact" class="form-select" required>
-                    @foreach(array_column(\App\Enums\TypeContact::cases(), 'value') as $option)
-                    <option
-                    value="{{ $option }}"
-                    @if($contact->typeContact == $option)
-                    selected
-                    @endif
-                    >
-                        {{$option}}
-                    </option>
-                    @endforeach
-                </select>
-            </div>
-            <x-text-input id="typeContact" name="typeContact" type="text" class="" :value="old('info', $contact->info)" />
-        </div>
-
-        @endforeach
-
-        <div class="mt-4">
-            <a href="">Contatos {{ $user->contacts->count() }}</a>
+            @foreach ($user->contacts as $key => $contact)
+                <div class="flex flew-row">
+                    <div class="mt-4">
+                        <select name="contacts[{{$key}}][typeContact]" class="form-select" required>
+                            @foreach(array_column(\App\Enums\TypeContact::cases(), 'value') as $option)
+                            <option
+                                value="{{ $option }}"
+                                @if($contact->typeContact == $option)
+                                    selected
+                                @endif
+                            >
+                                {{$option}}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <x-text-input name="contacts[{{$key}}][info]" type="text" class="" :value="old('info', $contact->info)" />
+                </div>
+                <input type="hidden" name="contacts[{{$key}}][id]" value="{{$contact->id}}">
+            @endforeach
         </div>
 
         <div class="flex items-center gap-4">
@@ -250,3 +248,12 @@
 </section>
 
 <script type="text/javascript" src="js/select2.js"></script>
+
+{{-- <script>
+    let contadorContatos = 1;
+    function updateForeach {
+        contadorContatos++;
+
+    }
+
+</script> --}}

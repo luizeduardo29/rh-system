@@ -27,25 +27,33 @@ class ProfileController extends Controller
 
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $photo = User::find($request->user()->id)->photo;
+        try {
+            DB::transaction(function () use ($request) {
+                $photo = User::find($request->user()->id)->photo;
 
-        $request->user()->fill($request->validated());
+                $request->user()->fill($request->validated());
 
-        if ($request->user()->isDirty('email'))
-        {
-            $request->user()->email_verified_at = null;
+                if ($request->user()->isDirty('email'))
+                {
+                    $request->user()->email_verified_at = null;
+                }
+
+                if($request->user()->isDirty('photo'))
+                {
+                    if ($photo != null) {
+                        Storage::delete($photo);
+                    }
+
+                    $request->user()->photo = $request->file('photo')->store('users/profile');
+                }
+
+                foreach ($request->contacts as $contact) {
+                    $request->user()->contacts()->find($contact['id'])->update($contact);
+                }
+            });
+        } catch (\Throwable $th) {
+            //throw $th;
         }
-
-        if($request->user()->isDirty('photo'))
-        {
-            if ($photo != null) {
-                // dd($photo);
-                Storage::delete($photo);
-            }
-            $request->user()->photo = $request->file('photo')->store('users/profile');
-        }
-
-        $request->user()->update();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
