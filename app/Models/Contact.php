@@ -10,8 +10,9 @@ class Contact extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'info',
+    protected $guarded = [
+        'id',
+        'user_id'
     ];
 
     public function user(): BelongsTo

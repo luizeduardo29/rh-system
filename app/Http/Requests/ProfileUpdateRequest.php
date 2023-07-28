@@ -24,7 +24,7 @@ class ProfileUpdateRequest extends FormRequest
             'naturalness' => ['required'],
             'gender' => ['required'],
             'maritalStatus' => ['required'],
-            'photo' => ['required']
+            'photo' => ['nullable']
         ];
     }
 }

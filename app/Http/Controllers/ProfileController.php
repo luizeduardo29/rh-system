@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
@@ -25,20 +27,22 @@ class ProfileController extends Controller
 
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $photo = $request->user()->photo;
+        $photo = User::find($request->user()->id)->photo;
 
         $request->user()->fill($request->validated());
 
-        if ($request->user()->isDirty('email')) {
+        if ($request->user()->isDirty('email'))
+        {
             $request->user()->email_verified_at = null;
         }
 
-        if($request->user()->isDirty('photo')){
+        if($request->user()->isDirty('photo'))
+        {
             if ($photo != null) {
+                // dd($photo);
                 Storage::delete($photo);
             }
-
-            $request->file('photo')->store('users/profile');
+            $request->user()->photo = $request->file('photo')->store('users/profile');
         }
 
         $request->user()->update();
@@ -46,9 +50,6 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
-    /**
-     * Delete the user's account.
-     */
     public function destroy(Request $request): RedirectResponse
     {
         $request->validateWithBag('userDeletion', [

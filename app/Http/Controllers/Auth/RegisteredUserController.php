@@ -30,8 +30,6 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        //dd($request->all());
-        //$validated =
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
@@ -45,8 +43,6 @@ class RegisteredUserController extends Controller
             'photo' => ['required'],
         ]);
 
-        //  dd($request->all());
-
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -55,25 +51,12 @@ class RegisteredUserController extends Controller
             'birth' => $request->birth,
             'naturalness' => $request->naturalness,
             'nationality' => $request->nationality,
-            'photo' => $request->file('image')->store('users/profile'),
+            'photo' => $request->file('photo')->store('users/profile'),
             'gender' => $request->gender,
             'maritalStatus' => $request->maritalStatus,
         ]);
 
-        // $var = [
-        //     [
-        //         "typeContact" => "Email",
-        //         "info" => "215454568"
-        //     ],
-        //     [
-        //         "typeContact" => "WebSite",
-        //         "info" => "215454568"
-        //     ],
-        // ];
-
         $user->contacts()->createMany($request->contacts);
-
-        //dd("hnjsdhjasgdhja");
 
         event(new Registered($user));
 

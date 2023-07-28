@@ -164,9 +164,9 @@
                     </option>
                 @endforeach
             </select>
-    </div>
+        </div>
 
-    <div class="mt-4">
+        <div class="mt-4">
             <label
             for=""
             class=block
@@ -196,16 +196,20 @@
                     </option>
                 @endforeach
             </select>
-    </div>
+        </div>
 
-    <div class="mt-4 relative">
+        <div class="mt-4 relative">
         <x-input-label for="photo" :value="__('Photo')" />
         <input
         type="file"
         name="photo"
         class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
         />
-    </div>
+        </div>
+
+        <div class="mt-4">
+            <a href="">Contatos ({{ $user->contacts->count() }})</a>
+        </div>
 
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
