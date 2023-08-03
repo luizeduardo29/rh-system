@@ -14,11 +14,13 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-    public function index (Request $request): View
+    public function index (): View
     {
-        $allUsers = $request->user()->all();
+        return view('index');
+        // $allUsers = $request->user()->all();
         // dd($allUsers);
-        return view('index', compact('allUsers'));
+        // return view('index', compact('allUsers'));
+        //return view('index')->with('allUsers', $request->user()->all());
 
     }
 
