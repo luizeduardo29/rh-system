@@ -44,19 +44,19 @@ final class UserTable extends PowerGridComponent
         //         'contacts.typeContact as typeContact',
         //     ]);
 
-        dd(User::query()
-        ->leftJoin('contacts', function ($contacts) {
-            $contacts->on('users.id', '=', 'contacts.user_id');
-        })
-        ->select([
-            'users.id',
-            'users.name',
-            DB::raw('COALESCE(
-                (SELECT MIN(id) FROM contacts WHERE user_id = users.id AND typeContact = "Telefone"),
-                (SELECT MIN(id) FROM contacts WHERE user_id = users.id)
-            ) AS contact_id'),
-            'contacts.typeContact as typeContact',
-        ])->toSql());
+        // dd(User::query()
+        // ->leftJoin('contacts', function ($contacts) {
+        //     $contacts->on('users.id', '=', 'contacts.user_id');
+        // })
+        // ->select([
+        //     'users.id',
+        //     'users.name',
+        //     DB::raw('COALESCE(
+        //         (SELECT MIN(id) FROM contacts WHERE user_id = users.id AND typeContact = "Telefone"),
+        //         (SELECT MIN(id) FROM contacts WHERE user_id = users.id)
+        //     ) AS contact_id'),
+        //     'contacts.typeContact as typeContact',
+        // ])->toSql());
 
         return User::query()
                 ->leftJoin('contacts', function ($contacts) {
