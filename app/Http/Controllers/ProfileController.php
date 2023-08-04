@@ -14,6 +14,12 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
+    protected $model;
+
+    public function __construct(User $user)
+    {
+        $this->model = $user;
+    }
     public function index (): View
     {
         return view('index');
@@ -24,48 +30,95 @@ class ProfileController extends Controller
 
     }
 
-
-
-
-    public function edit(Request $request): View
+    public function edit(Request $request, int $id):View
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        if (!$user = $this->model->find($id))
+            return redirect()->route('users.index');
+
+        return view('edit', compact('user'));
     }
 
 
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+
+
+    // public function edit(Request $request): View
+    // {
+    //     return view('profile.edit', [
+    //         'user' => $request->user(),
+    //     ]);
+    // }
+
+
+    public function update(ProfileUpdateRequest $request, int $id): RedirectResponse
     {
-        try {
-            DB::transaction(function () use ($request) {
-                $photo = User::find($request->user()->id)->photo;
+        // dd($request->file('photo'));
+        // try {
+        //     DB::transaction(function () use ($request) {
+        //         $photo = User::find($request->user()->id)->photo;
 
-                $request->user()->fill($request->validated());
+        //         $request->user()->fill($request->validated());
 
-                if ($request->user()->isDirty('email'))
-                {
-                    $request->user()->email_verified_at = null;
-                }
+        //         if ($request->user()->isDirty('email'))
+        //         {
+        //             $request->user()->email_verified_at = null;
+        //         }
 
-                if($request->user()->isDirty('photo'))
-                {
-                    if ($photo != null) {
-                        Storage::delete($photo);
-                    }
+        //         if($request->user()->isDirty('photo'))
+        //         {
+        //             if ($photo != null) {
+        //                 Storage::delete($photo);
+        //             }
 
-                    $request->user()->photo = $request->file('photo')->store('users/profile');
-                }
+        //             $request->user()->photo = $request->file('photo')->store('users/profile');
+        //         }
 
-                foreach ($request->contacts as $contact) {
-                    $request->user()->contacts()->find($contact['id'])->update($contact);
-                }
-            });
-        } catch (\Throwable $th) {
-            //throw $th;
+        //         foreach ($request->contacts as $contact) {
+        //             $request->user()->contacts()->find($contact['id'])->update($contact);
+        //         }
+        //     });
+        // } catch (\Throwable $th) {
+        //     //throw $th;
+        // }
+        if (!$user = $this->model->find($id))
+            return redirect()->route('users.index');
+
+        $photo = User::find($user->id)->photo;
+
+        $data = $request->except('email');
+
+        // if ($user->isDirty('email'))
+        // {
+        //     $user->email_verified_at = null;
+        // }
+        // dump($photo);
+        // dump($request->file('photo'));
+        if($request->file('photo') != $photo)
+        {
+            // dump("entrou aqui");
+            if ($photo != null) {
+                // dump("deletou a foto");
+                Storage::delete($photo);
+            }
+            $user->photo = $request->file('photo')->store('users/profile');
+            // dd("salvou a foto");
+        }else
+        {
+            dd("tenta dnv");
         }
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        // dd($photo);
+
+        // if($request->image) {
+        //    $data['image'] = $request->image->store('users');
+        // }
+
+        $user->update($data);
+
+        foreach ($request->contacts as $contact) {
+            $user->contacts()->find($contact['id'])->update($contact);
+        }
+
+        return redirect()->back();
     }
 
     public function destroy(Request $request): RedirectResponse

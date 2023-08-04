@@ -193,7 +193,7 @@ final class PowerGridDemoTable extends PowerGridComponent
             Button::add('bulk-demo')
                 ->caption(__('Bulk Action'))
                 ->class('cursor-pointer block bg-indigo-500 text-white border border-gray-300 rounded py-2 px-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 dark:border-gray-500 dark:bg-gray-500 2xl:dark:placeholder-gray-300 dark:text-gray-200 dark:text-gray-300')
-                ->emit('bulkActionEvent', [])
+                ->emit('bulkActionEvent', []),
         ];
     }
 
@@ -253,6 +253,12 @@ final class PowerGridDemoTable extends PowerGridComponent
            Button::make('info', 'Click me')
                ->class('bg-indigo-500 hover:bg-indigo-600 cursor-pointer text-white px-3 py-2 text-sm rounded-md')
                ->emit('rowActionEvent', ['id' => 'id']),
+
+            Button::add('view')
+               ->caption('Index')
+               ->class('bg-indigo-500 hover:bg-indigo-600 cursor-pointer text-white px-3 py-2 text-sm rounded-md')
+               ->route('index', []),
+
         ];
     }
 
@@ -292,6 +298,8 @@ final class PowerGridDemoTable extends PowerGridComponent
             Rule::rows()
                 ->when(fn($user) => $user->id === 4)
                 ->setAttribute('class', 'bg-pg-secondary-200 hover:bg-pg-secondary-300'),
+
+
         ];
     }
 

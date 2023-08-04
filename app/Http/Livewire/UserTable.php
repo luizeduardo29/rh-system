@@ -34,49 +34,32 @@ final class UserTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        // return User::query()
-        //     ->join('contacts', function ($contacts) {
-        //         $contacts->on('users.id', '=', 'contacts.user_Id');
-        //     })
-        //     ->select([
-        //         'users.id',
-        //         'users.name',
-        //         'contacts.typeContact as typeContact',
-        //     ]);
-
-        // dd(User::query()
-        // ->leftJoin('contacts', function ($contacts) {
-        //     $contacts->on('users.id', '=', 'contacts.user_id');
-        // })
-        // ->select([
-        //     'users.id',
-        //     'users.name',
-        //     DB::raw('COALESCE(
-        //         (SELECT MIN(id) FROM contacts WHERE user_id = users.id AND typeContact = "Telefone"),
-        //         (SELECT MIN(id) FROM contacts WHERE user_id = users.id)
-        //     ) AS contact_id'),
-        //     'contacts.typeContact as typeContact',
-        // ])->toSql());
-
         return User::query()
-                ->leftJoin('contacts', function ($contacts) {
-                    $contacts->on('users.id', '=', 'contacts.user_id');
-                })
-                ->select([
-                    'users.id',
-                    'users.name',
-                    'users.email',
-                    'users.initials',
-                    DB::raw('COALESCE(
-                        (SELECT MIN(id) FROM contacts WHERE user_id = users.id AND typeContact = "Telefone"),
-                        (SELECT MIN(id) FROM contacts WHERE user_id = users.id)
-                    ) AS contact_id'),
-                    'contacts.typeContact',
-                    'contacts.info',
-                ]);
-
-
-
+        ->leftJoin('contacts', function ($contacts) {
+            $contacts->on('users.id', '=', 'contacts.user_id');
+        })
+        ->select([
+            'users.id',
+            'users.name',
+            'users.email',
+            'users.initials',
+            'contacts.typeContact',
+            DB::raw('CASE
+                WHEN contacts.typeContact = "Telefone" THEN contacts.info
+                ELSE "Telefone não informado"
+            END AS contact_info'),
+        ])
+        ->where(function ($query) {
+            $query->whereNull('contacts.id')
+                  ->orWhereIn('contacts.id', function ($subquery) {
+                      $subquery->select(DB::raw('COALESCE(
+                          (SELECT MIN(id) FROM contacts WHERE user_id = users.id AND typeContact = "Telefone"),
+                          (SELECT MIN(id) FROM contacts WHERE user_id = users.id)
+                      )'))
+                      ->from('contacts')
+                      ->whereColumn('user_id', 'users.id');
+                  });
+        });
     }
 
     public function relationSearch(): array
@@ -87,16 +70,11 @@ final class UserTable extends PowerGridComponent
     public function addColumns(): PowerGridColumns
     {
         return PowerGrid::columns()
-            // ->addColumn('id')
+            ->addColumn('id')
             ->addColumn('name')
             ->addColumn('email')
             ->addColumn('initials');
-            //->addColumn('photo')
             // ->addColumn('birth_formatted', fn (User $model) => Carbon::parse($model->birth)->format('d/m/Y'))
-            // ->addColumn('nationality')
-            // ->addColumn('naturalness')
-            // ->addColumn('gender')
-            // ->addColumn('maritalStatus');
             //->addColumn('created_at_formatted', fn (User $model) => Carbon::parse($model->created_at)->format('d/m/Y H:i:s'));
     }
 
@@ -104,6 +82,7 @@ final class UserTable extends PowerGridComponent
     {
         return [
             Column::make('Id', 'id'),
+
             Column::make('Name', 'name')
                 ->sortable()
                 ->searchable(),
@@ -116,7 +95,7 @@ final class UserTable extends PowerGridComponent
                 ->sortable()
                 ->searchable(),
 
-            Column::make('Telefone', 'typeContact')
+            Column::make('Telefone', 'contact_info')
                 ->sortable()
                 ->searchable(),
 
@@ -155,13 +134,24 @@ final class UserTable extends PowerGridComponent
             Filter::inputText('name')->operators(['contains']),
             Filter::inputText('email')->operators(['contains']),
             Filter::inputText('initials')->operators(['contains']),
-            //Filter::inputText('photo')->operators(['contains']),
+            Filter::inputText('info')->operators(['contains']),
             Filter::datepicker('birth'),
-            Filter::inputText('nationality')->operators(['contains']),
-            Filter::inputText('naturalness')->operators(['contains']),
-            Filter::inputText('gender')->operators(['contains']),
-            Filter::inputText('maritalStatus')->operators(['contains']),
-            //Filter::datetimepicker('created_at'),
+        ];
+    }
+
+    public function actions(): array
+    {
+       return [
+            Button::add('view')
+               ->caption('Index')
+               ->class('bg-indigo-500 hover:bg-indigo-600 cursor-pointer text-white px-3 py-2 text-sm rounded-md')
+               ->target('_self')
+               ->route('index', ['id' => 'id']),
+            Button::add('view')
+               ->caption('Edit')
+               ->class('bg-indigo-500 hover:bg-indigo-600 cursor-pointer text-white px-3 py-2 text-sm rounded-md')
+               ->target('_self')
+               ->route('edit', ['id' => 'id']),
         ];
     }
 }

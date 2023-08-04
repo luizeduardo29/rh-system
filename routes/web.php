@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\HttpKernel\Profiler\Profile;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,7 +31,8 @@ Route::get('/dashboard', function () {
 // Route::get('/index', [ProfileController::class, 'index'])->name('profile.index');
 Route::get('/index', [ProfileController::class, 'index'])->name('index');
 Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+Route::patch('/profile/{id}', [ProfileController::class, 'update'])->name('profile.update');
 Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 Route::view('/powergrid', 'powergrid-demo');
+Route::get('/edit/{id}', [ProfileController::class, 'edit'])->name('edit');
 require __DIR__.'/auth.php';

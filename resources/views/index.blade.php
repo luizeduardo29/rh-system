@@ -18,7 +18,7 @@
         </div>
     </div> --}}
     <livewire:user-table/>
-                <livewire:power-grid-demo-table/>
+                {{-- <livewire:power-grid-demo-table/> --}}
 
 </x-app-layout>
 
