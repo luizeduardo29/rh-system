@@ -114,9 +114,11 @@ class ProfileController extends Controller
 
         $user->update($data);
 
-        foreach ($request->contacts as $contact) {
-            $user->contacts()->find($contact['id'])->update($contact);
-        }
+        if ($request->contact != null) {
+            foreach ($request->contacts as $contact) {
+                $user->contacts()->find($contact['id'])->update($contact);
+            }
+        }     
 
         return redirect()->back();
     }
