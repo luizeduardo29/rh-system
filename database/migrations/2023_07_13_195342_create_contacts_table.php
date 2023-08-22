@@ -10,16 +10,19 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('contacts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
+            $table->foreignId('user_id')
+                ->constrained('users')
+                ->onDelete('cascade');
             $table->enum('typeContact', array_column(TypeContact::cases(), 'value'))->default('Telefone');
             $table->string('info');
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.

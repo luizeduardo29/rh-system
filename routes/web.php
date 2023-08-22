@@ -35,4 +35,5 @@ Route::patch('/profile/{id}', [ProfileController::class, 'update'])->name('profi
 Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 Route::view('/powergrid', 'powergrid-demo');
 Route::get('/edit/{id}', [ProfileController::class, 'edit'])->name('edit');
+Route::delete('/edit/{id}', [ProfileController::class, 'destroy'])->name('destroy');
 require __DIR__.'/auth.php';

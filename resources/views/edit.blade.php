@@ -21,7 +21,12 @@
 
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                 <div class="max-w-xl">
-                    @include('profile.partials.delete-user-form')
+                    <form action="{{ route('destroy', $user->id) }}" method="POST" >
+                        @method('DELETE')
+                        @csrf
+                        <button type="submit" class="bg-red-200 rounded-full py-2 px-6">Excluir Conta</button>
+                    </form>
+                    {{-- @include('profile.partials.delete-user-form') --}}
                 </div>
             </div>
         </div>

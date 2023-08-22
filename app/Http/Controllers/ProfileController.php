@@ -141,7 +141,13 @@ class ProfileController extends Controller
     //     return Redirect::to('/');
     // }
 
-    public function destroy (){
-        return;
+    public function destroy (int $id): RedirectResponse
+    {
+        if (!$user = $this->model->find($id))
+            return redirect()->route('users.index');
+
+        $user->delete();
+        
+        return redirect()->route('dashboard');
     }
 }
